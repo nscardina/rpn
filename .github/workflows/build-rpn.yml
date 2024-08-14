@@ -10,7 +10,7 @@ jobs:
   build-rpn:
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS]
+        os: [ubuntu-latest, macos-latest]
 
     runs-on: ${{ matrix.os }}
 
