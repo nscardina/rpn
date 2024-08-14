@@ -8,8 +8,11 @@ on:
 
 jobs:
   build-rpn:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS]
 
-    runs-on: [ ubuntu-latest, macOS ]
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v4
