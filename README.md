@@ -15,6 +15,12 @@
 | Cube root | `cbrt` | `rpn 27 cbrt` yields `3` |
 | *n*th root | `root` | `rpn 27 3 root` yields `3` |
 | Percent | `%` or `percent` | `rpn 100 %` yields `1` |
+| Sine | `sin` or `sine` | `rpn 0 sin` yields `0` |
+| Cosine | `cos` or `cosine` | `rpn 0 cos` yields `1` |
+| Tangent | `tan` or `tangent` | `rpn 0 tan` yields `0` |
+| Arcsine | `asin` or `arcsin` or `arcsine` | `rpn 0 arcsin` yields `0` |
+| Arccosine | `acos` or `arccos` or `arccosine` | `rpn 1 arccos` yields `0` |
+| Arctangent | `atan` or `arctan` or `arctangent` | `rpn 0 arctan` yields `0` |
 
 [^1]: The `*` character may need to be escaped on the terminal due to its use as a wildcard character; for example, you may need to type `rpn 3 2 '*'`.
 

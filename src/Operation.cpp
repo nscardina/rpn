@@ -124,6 +124,54 @@ namespace {
             "percent"
         );
     }
+
+    void handle_sin(std::stack<NumberType>& numbers) {
+        handle_unary_op(
+            numbers,
+            [](auto x) { return std::sin(x); },
+            "sine"
+        );
+    }
+
+    void handle_cos(std::stack<NumberType>& numbers) {
+        handle_unary_op(
+            numbers,
+            [](auto x) { return std::cos(x); },
+            "cosine"
+        );
+    }
+
+    void handle_tan(std::stack<NumberType>& numbers) {
+        handle_unary_op(
+            numbers,
+            [](auto x) { return std::tan(x); },
+            "tangent"
+        );
+    }
+
+    void handle_arcsin(std::stack<NumberType>& numbers) {
+        handle_unary_op(
+            numbers,
+            [](auto x) { return std::asin(x); },
+            "arcsine"
+        );
+    }
+
+    void handle_arccos(std::stack<NumberType>& numbers) {
+        handle_unary_op(
+            numbers,
+            [](auto x) { return std::acos(x); },
+            "arccosine"
+        );
+    }
+
+    void handle_arctan(std::stack<NumberType>& numbers) {
+        handle_unary_op(
+            numbers,
+            [](auto x) { return std::atan(x); },
+            "arctangent"
+        );
+    }
     
 }
 
@@ -156,6 +204,24 @@ namespace Operation {
         }
         else if (operation_name == "%" || operation_name == "percent") {
             handle_percent(numbers);
+        }
+        else if (operation_name == "sin" || operation_name == "sine") {
+            handle_sin(numbers);
+        }
+        else if (operation_name == "cos" || operation_name == "cosine") {
+            handle_cos(numbers);
+        }
+        else if (operation_name == "tan" || operation_name == "tangent") {
+            handle_tan(numbers);
+        }
+        else if (operation_name == "asin" || operation_name == "arcsin" || operation_name == "arcsine") {
+            handle_arcsin(numbers);
+        }
+        else if (operation_name == "acos" || operation_name == "arccos" || operation_name == "arccosine") {
+            handle_arccos(numbers);   
+        }
+        else if (operation_name == "atan" || operation_name == "arctan" || operation_name == "arctangent") {
+            handle_arctan(numbers);
         }
 
 
