@@ -18,5 +18,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install Clang 18
+        run: brew install llvm@18
       - name: Build rpn executable
-        run: make rpn CC='clang'
+        run: make rpn CC="$(brew --prefix llvm@18)/bin/clang++"
