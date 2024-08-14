@@ -7,14 +7,16 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-rpn:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-
-    runs-on: ${{ matrix.os }}
-
+  build-rpn-linux:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - name: Build rpn executable
       run: make rpn
+
+  build-run-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build rpn executable
+        run: make rpn CC='clang'
