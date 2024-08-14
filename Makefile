@@ -1,5 +1,5 @@
 rpn: main.o Operation.o
-	g++ -std=c++23 -o rpn build/main.o build/Operation.o
+	g++ -std=c++23 -o out/rpn build/main.o build/Operation.o
 
 main.o:
 	g++ -std=c++23 -o build/main.o -c src/main.cpp
