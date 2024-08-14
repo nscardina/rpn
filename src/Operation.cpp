@@ -3,126 +3,126 @@
 #include <stdexcept>
 #include <cmath>
 #include <numbers>
+#include <functional>
+#include <initializer_list>
+
+using namespace std::string_literals;
 
 namespace {
-    void handle_add(std::stack<NumberType>& numbers) {
-        // Binary operation - need 2 arguments
-        if (numbers.size() >= 2) {
-            auto arg2 = numbers.top();
-            numbers.pop();
-            auto arg1 = numbers.top();
-            numbers.pop();
 
-            numbers.emplace(arg1 + arg2);
+    template<class T>
+    inline T get_and_pop(std::stack<T>& stack) {
+        T elem = stack.top();
+        stack.pop();
+        return elem;
+    }
+
+    void handle_unary_op(
+        std::stack<NumberType>& numbers,
+        std::function<NumberType(NumberType)> operation,
+        std::string&& operation_name
+    ) {
+        if (numbers.size() >= 1) {
+            numbers.emplace(operation(get_and_pop(numbers)));
         } else {
-            throw std::runtime_error(std::string("Too few arguments for addition; found only ") + std::to_string(numbers.size()));
+            throw std::runtime_error(
+                "Too few arguments for "s
+                + operation_name
+                + "; found only "s
+                + std::to_string(numbers.size())
+            );
         }
+    }
+
+    void handle_binary_op(
+        std::stack<NumberType>& numbers, 
+        std::function<NumberType(NumberType, NumberType)> operation,
+        std::string&& operation_name
+    ) {
+        if (numbers.size() >= 2) {
+            auto arg2 = get_and_pop(numbers);
+            auto arg1 = get_and_pop(numbers);
+            numbers.emplace(operation(arg1, arg2));
+        } else {
+            throw std::runtime_error(
+                "Too few arguments for "s
+                + operation_name
+                + "; found only "s
+                + std::to_string(numbers.size())
+            );
+        }
+    }
+
+    void handle_add(std::stack<NumberType>& numbers) {
+        handle_binary_op(
+            numbers,
+            [](auto a, auto b) { return a + b; },
+            "addition"
+        );
     }
 
     void handle_subtract(std::stack<NumberType>& numbers) {
-        // Binary operation - need 2 arguments
-        if (numbers.size() >= 2) {
-            auto arg2 = numbers.top();
-            numbers.pop();
-            auto arg1 = numbers.top();
-            numbers.pop();
-
-            numbers.emplace(arg1 - arg2);
-        } else {
-            throw std::runtime_error(std::string("Too few arguments for subtraction; found only ") + std::to_string(numbers.size()));
-        }
+        handle_binary_op(
+            numbers,
+            [](auto a, auto b) { return a - b; },
+            "subtraction"
+        );
     }
 
     void handle_multiply(std::stack<NumberType>& numbers) {
-        // Binary operation - need 2 arguments
-        if (numbers.size() >= 2) {
-            auto arg2 = numbers.top();
-            numbers.pop();
-            auto arg1 = numbers.top();
-            numbers.pop();
-
-            numbers.emplace(arg1 * arg2);
-        } else {
-            throw std::runtime_error(std::string("Too few arguments for multiplication; found only ") + std::to_string(numbers.size()));
-        }
+        handle_binary_op(
+            numbers,
+            [](auto a, auto b) { return a * b; },
+            "multiplication"
+        );
     }
 
     void handle_divide(std::stack<NumberType>& numbers) {
-        // Binary operation - need 2 arguments
-        if (numbers.size() >= 2) {
-            auto arg2 = numbers.top();
-            numbers.pop();
-            auto arg1 = numbers.top();
-            numbers.pop();
-
-            numbers.emplace(arg1 / arg2);
-        } else {
-            throw std::runtime_error(std::string("Too few arguments for division; found only ") + std::to_string(numbers.size()));
-        }
+        handle_binary_op(
+            numbers,
+            [](auto a, auto b) { return a / b; },
+            "division"
+        );
     }
 
     void handle_pow(std::stack<NumberType>& numbers) {
-        // Binary operation - need 2 arguments
-        if (numbers.size() >= 2) {
-            auto arg2 = numbers.top(); // power
-            numbers.pop();
-            auto arg1 = numbers.top(); // base
-            numbers.pop();
-
-            numbers.emplace(std::pow(arg1, arg2));
-        } else {
-            throw std::runtime_error(std::string("Too few arguments for exponentiation; found only ") + std::to_string(numbers.size()));
-        }
+        handle_binary_op(
+            numbers,
+            [](auto a, auto b) { return std::pow(a, b); },
+            "exponentiation"
+        );
     }
 
     void handle_sqrt(std::stack<NumberType>& numbers) {
-        // Unary operation - need 1 argument
-        if (numbers.size() >= 1) {
-            auto arg = numbers.top();
-            numbers.pop();
-
-            numbers.emplace(std::sqrt(arg));
-        } else {
-            throw std::runtime_error(std::string("Too few arguments for square root; found only ") + std::to_string(numbers.size()));
-        }
+        handle_unary_op(
+            numbers,
+            [](auto x) { return std::sqrt(x); },
+            "square root"
+        );
     }
 
     void handle_cbrt(std::stack<NumberType>& numbers) {
-        // Unary operation - need 1 argument
-        if (numbers.size() >= 1) {
-            auto arg = numbers.top();
-            numbers.pop();
-
-            numbers.emplace(std::cbrt(arg));
-        } else {
-            throw std::runtime_error(std::string("Too few arguments for cube root; found only ") + std::to_string(numbers.size()));
-        }
+        handle_unary_op(
+            numbers,
+            [](auto x) { return std::cbrt(x); },
+            "cube root"
+        );
     }
 
     void handle_root(std::stack<NumberType>& numbers) {
-        // Unary operation - need 1 argument
-        if (numbers.size() >= 2) {
-            auto arg2 = numbers.top(); // power
-            numbers.pop();
-            auto arg1 = numbers.top(); // base
-            numbers.pop();
-
-            numbers.emplace(std::pow(arg1, 1.0 / arg2));
-        } else {
-            throw std::runtime_error(std::string("Too few arguments for cube root; found only ") + std::to_string(numbers.size()));
-        }
+        handle_binary_op(
+            numbers,
+            [](auto a, auto b) { return std::pow(a, 1 / b); },
+            "root"
+        );
     }
 
     void handle_percent(std::stack<NumberType>& numbers) {
-        // Unary operation - need 1 argument
-        if (numbers.size() >= 1) {
-            auto arg = numbers.top();
-            numbers.pop();
-
-            numbers.emplace(arg / 100.0);
-        } else {
-            throw std::runtime_error(std::string("Too few arguments for percentage; found only ") + std::to_string(numbers.size()));
-        }
+        handle_unary_op(
+            numbers,
+            [](auto x) { return x / 100.0; },
+            "percent"
+        );
     }
     
 }

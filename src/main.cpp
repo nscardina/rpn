@@ -33,5 +33,9 @@ int main(int argc, char* argv[]) {
         std::exit(0);
     } else {
         std::cerr << "Error: " << numbers.size() << " unused arguments";
+        while (numbers.size() > 0) {
+            std::cerr << " '" << numbers.top() << "'";
+            numbers.pop();
+        }
     }
 }
